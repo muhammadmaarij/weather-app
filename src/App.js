@@ -25,7 +25,7 @@ const WeatherApp = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data[0].lat, data[0].lon);
+        console.log(data.coord.lat, data[0].lon);
         getAdditionalData(data[0].lat, data[0].lon);
       })
       .catch((error) => {
@@ -62,7 +62,7 @@ const WeatherApp = () => {
 
   const parseWeatherData = (data) => {
     console.log("eee", data);
-    const city2 = data.city;
+    const city2 = data.city.name;
     const weatherList = data.list;
     const weatherData2 = [];
 
@@ -96,7 +96,7 @@ const WeatherApp = () => {
     }
     console.log("heree", weatherData2);
     setWeatherData(weatherData2);
-    setCity(city2.name);
+    setCity(city2);
 
     return { city2, weatherData2 };
   };
