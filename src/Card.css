@@ -1,3 +1,13 @@
+* {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .topp{
+    padding: 0;
+    margin: 0;
+    background-color: darkslateblue;
+  }
 .parent-div{
     display: flex;
     flex-direction: column;
@@ -18,7 +28,6 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: 2px solid #ccc;
 }
 .text-temp-low{
     font-size: 20px;
@@ -30,4 +39,18 @@
     font-size: 20px;
     color: grey;
     margin: 5px;
+}
+.pressure-div{
+    margin-left : 250px;
+}
+.selected-day{
+    display: flex;
+    margin-left: 50px;
+    width: 600px;
+}
+h3{
+    font-size: 16;
+    font-weight: normal;
+    color: dimgrey;
+    margin-bottom: 5px;
 }

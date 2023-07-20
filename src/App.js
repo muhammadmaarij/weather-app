@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import Card from "./components/Card";
-
+import "../src/Card.css";
+import { IoSearch } from "react-icons/io5";
 const API_KEY = "18f2ba39d8b76ccbd01e5a800a9d5d07";
 
 const WeatherApp = () => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
   const [weatherData, setWeatherData] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("city");
+  const [metric, setMetric] = useState("metric");
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const handleCardClick = (index) => {
     setSelectedCardIndex(index);
@@ -17,16 +25,41 @@ const WeatherApp = () => {
   };
 
   const fetchWeatherData = () => {
+    let apiUrl = "";
+
+    switch (selectedOption) {
+      case "city":
+        apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`;
+        break;
+      case "zipcode":
+        apiUrl = `http://api.openweathermap.org/data/2.5/forecast?zip=${city}&units=${metric}&appid=${API_KEY}`;
+        break;
+      case "coordinates":
+        const [latitudes, longitudes] = city.split(" ");
+        apiUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${latitudes}&lon=${longitudes}&units=${metric}&appid=${API_KEY}`;
+        break;
+      default:
+        alert("Invalid location type");
+        return;
+    }
+
     fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`
+      apiUrl
+      // `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=${API_KEY}`
     )
       .then((response) => {
         console.log(response);
         return response.json();
       })
       .then((data) => {
-        console.log(data.coord.lat, data[0].lon);
-        getAdditionalData(data[0].lat, data[0].lon);
+        if (selectedOption == "city") {
+          console.log(data.coord.lon);
+          // console.log(data[0].coord.lat, data[0].coord.lon);
+          getAdditionalData(data.coord.lat, data.coord.lon);
+          // getAdditionalData(data[0].lat, data[0].lon);
+        } else {
+          parseWeatherData(data);
+        }
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
@@ -63,21 +96,23 @@ const WeatherApp = () => {
   const parseWeatherData = (data) => {
     console.log("eee", data);
     const city2 = data.city.name;
+    const country2 = data.city.country;
     const weatherList = data.list;
     const weatherData2 = [];
 
     for (let i = 0; i < weatherList.length; i += 8) {
       //3h data so for diff of 24h +8 -> 3h*8=24h
       const weather = weatherList[i];
+      console.log("fffmnjghjfhfgh", weather);
       console.log("dasdsddddd", weather.weather);
+      console.log("dasdsddddd", weather.weather[0].icon);
+      console.log("www", weather.weather[0].main);
       const date = new Date(weather.dt_txt);
       const temperature = Math.round(weather.main.temp);
-      console.log("dsdds", weather.main.temp_min);
-      console.log(weather.main.temp_max);
       const minTemperature = Math.floor(weather.main.temp_min);
       const maxTemperature = Math.ceil(weather.main.temp_max);
-      const weatherIcon = weather.weather.icon;
-      const weather2 = weather.weather.main;
+      const weatherIcon = weather.weather[0].icon;
+      const weather2 = weather.weather[0].main;
       const pressure = weather.main.pressure;
       const humidity = weather.main.humidity;
       const windSpeed = weather.wind.speed;
@@ -97,6 +132,7 @@ const WeatherApp = () => {
     console.log("heree", weatherData2);
     setWeatherData(weatherData2);
     setCity(city2);
+    setCountry(country2);
 
     return { city2, weatherData2 };
   };
@@ -105,21 +141,46 @@ const WeatherApp = () => {
     <div>
       <h1>Weather App</h1>
       <div>
+        <select
+          className="location-dropdown"
+          value={selectedOption}
+          onChange={handleOptionChange}
+        >
+          <option value="city">City</option>
+          <option value="coordinates">ID</option>
+          <option value="zipcode">Zip Code</option>
+        </select>
         <input
           type="text"
           value={city}
           onChange={handleCityChange}
           placeholder="Enter city name"
         />
+        <div>
+          <IoSearch />
+        </div>
         <button onClick={fetchWeatherData}>Get Weather</button>
       </div>
       {weatherData && (
         <div>
-          <h2>Weather for {city}</h2>
-          <p>Temperature: {weatherData[selectedCardIndex].temperature}°C</p>
-          <p>Humidity: {weatherData[selectedCardIndex].humidity}%</p>
-          <p>Wind Speed: {weatherData[selectedCardIndex].windSpeed} m/s</p>
           <div>
+            <h2>
+              Weather for {city}, {country}
+            </h2>
+            <p>Day: {weatherData[selectedCardIndex].date}°C</p>
+            <p>Weather: {weatherData[selectedCardIndex].weather2}°C</p>
+          </div>
+          <div className="selected-day">
+            <p>Temperature: {weatherData[selectedCardIndex].temperature}°C</p>
+            <div className="pressure-div">
+              <h3>Humidity: {weatherData[selectedCardIndex].humidity}%</h3>
+              <h3>Pressure: {weatherData[selectedCardIndex].pressure} hPa</h3>
+              <h3>
+                Wind Speed: {weatherData[selectedCardIndex].windSpeed} m/s
+              </h3>
+            </div>
+          </div>
+          <div style={{ display: "flex", margin: "20px" }}>
             <Card
               day={weatherData[0].date}
               weatherIcon={weatherData[0].weatherIcon}

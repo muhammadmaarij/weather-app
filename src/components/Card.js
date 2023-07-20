@@ -3,10 +3,12 @@ import "../Card.css";
 
 function Card({ day, weatherIcon, high, low, isSelected, onClick }) {
   const weatherIconStyle = {
-    height: "180px",
+    height: "200px",
     width: "140px",
     borderRadius: "10px",
     border: isSelected ? "2px solid #ccc" : "2px solid transparent",
+    backgroundColor: isSelected ? "#EEEDED" : "white",
+
     /* Add any other styles you want */
   };
 
