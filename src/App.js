@@ -11,6 +11,7 @@ const WeatherApp = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [selectedOption, setSelectedOption] = useState("city");
   const [metric, setMetric] = useState("metric");
+  const [degree, setDegree] = useState("C");
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -72,7 +73,7 @@ const WeatherApp = () => {
 
   const getAdditionalData = (latitude, longitude) => {
     fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}`
+      `http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=${metric}&appid=${API_KEY}`
     )
       .then((response) => {
         console.log(response);
@@ -92,6 +93,19 @@ const WeatherApp = () => {
         );
       });
   };
+
+  function toggleMetric() {
+    console.log("oreeeeeeeeeees");
+    if (metric == "metric") {
+      setMetric("imperial");
+      setDegree("F");
+      fetchWeatherData();
+    } else if (metric == "imperial") {
+      setMetric("metric");
+      setDegree("C");
+      fetchWeatherData();
+    }
+  }
 
   const parseWeatherData = (data) => {
     console.log("eee", data);
@@ -139,8 +153,20 @@ const WeatherApp = () => {
 
   return (
     <div>
-      <h1>Weather App</h1>
-      <div>
+      <div class="topp">
+        <h1
+          style={{
+            color: "white",
+            fontSize: "26px",
+            fontWeight: "normal",
+            marginTop: "5px",
+            marginLeft: "10px",
+          }}
+        >
+          WEATHER FORECAST (5 DAYS)
+        </h1>
+      </div>
+      <div className="input-container">
         <select
           className="location-dropdown"
           value={selectedOption}
@@ -155,23 +181,42 @@ const WeatherApp = () => {
           value={city}
           onChange={handleCityChange}
           placeholder="Enter city name"
+          className="location-input"
         />
-        <div>
+        <div className="search-btn" onClick={fetchWeatherData}>
           <IoSearch />
         </div>
-        <button onClick={fetchWeatherData}>Get Weather</button>
       </div>
       {weatherData && (
         <div>
           <div>
             <h2>
-              Weather for {city}, {country}
+              {city}, {country}
             </h2>
-            <p>Day: {weatherData[selectedCardIndex].date}°C</p>
-            <p>Weather: {weatherData[selectedCardIndex].weather2}°C</p>
+            <h4>{weatherData[selectedCardIndex].date}</h4>
+            <h4>{weatherData[selectedCardIndex].weather2}</h4>
           </div>
           <div className="selected-day">
-            <p>Temperature: {weatherData[selectedCardIndex].temperature}°C</p>
+            <img
+              className="image-temp"
+              src={`http://openweathermap.org/img/w/${weatherData[selectedCardIndex].weatherIcon}.png`}
+              alt="Weather Icon"
+            />
+            <button className="toggle-temp" onClick={() => toggleMetric()}>
+              <p className="today-temp">
+                {weatherData[selectedCardIndex].temperature}
+              </p>
+              <p
+                style={{
+                  fontSize: "22px",
+                  color: "dimgrey",
+                  marginLeft: "5px",
+                  marginTop: "5px",
+                }}
+              >
+                °C |°F
+              </p>
+            </button>
             <div className="pressure-div">
               <h3>Humidity: {weatherData[selectedCardIndex].humidity}%</h3>
               <h3>Pressure: {weatherData[selectedCardIndex].pressure} hPa</h3>
