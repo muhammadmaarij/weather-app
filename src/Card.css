@@ -7,6 +7,8 @@
     padding: 0;
     margin: 0;
     background-color: darkslateblue;
+    height: 40px;
+    padding: 10px;
   }
 .parent-div{
     display: flex;
@@ -41,12 +43,14 @@
     margin: 5px;
 }
 .pressure-div{
-    margin-left : 250px;
+    margin-left : 150px;
 }
 .selected-day{
     display: flex;
     margin-left: 50px;
-    width: 600px;
+    width: 700px;
+    background-color :white;
+    border-width :0;
 }
 h3{
     font-size: 16;
@@ -54,3 +58,52 @@ h3{
     color: dimgrey;
     margin-bottom: 5px;
 }
+h4{
+    font-size: 16;
+    font-weight: normal;
+    margin-left: 60px;
+    margin-bottom: 5px;
+    color: dimgrey;
+  }
+
+  h2{
+    font-size: 26px;
+    font-weight: normal;
+    color: dimgrey;
+    margin-left: 60px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  .today-temp{
+    display : flex;
+    font-size : 48px;
+    margin-left: 10px;
+
+  }
+  .toggle-temp{
+    background-color: white;
+    border-width: 0;
+    display: flex
+  }
+
+  .input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+  }
+  
+  .location-input {
+    padding: 10px;
+    width: 500px;
+  }
+  
+  .location-dropdown {
+    padding: 10px;
+  }
+
+  .search-btn {
+    padding: 8px 20px;
+    border: 1px solid #000;
+  }
