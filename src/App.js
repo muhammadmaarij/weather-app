@@ -80,7 +80,7 @@ const WeatherApp = () => {
         return response.json();
       })
       .then((data) => {
-        // setWeatherData(data);
+        //  setWeatherData(data);
         console.log("1", data);
         console.log("2", weatherData);
         parseWeatherData(data);
