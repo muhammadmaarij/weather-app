@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import Card from "./components/Card";
+import BarChart from "./components/BarChart";
 import "../src/Card.css";
 import { IoSearch } from "react-icons/io5";
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+Chart.register(CategoryScale);
+
 const API_KEY = "18f2ba39d8b76ccbd01e5a800a9d5d07";
 
 const WeatherApp = () => {
@@ -12,6 +18,7 @@ const WeatherApp = () => {
   const [selectedOption, setSelectedOption] = useState("city");
   const [metric, setMetric] = useState("metric");
   const [degree, setDegree] = useState("C");
+  const [data, setData] = useState([]);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -57,6 +64,7 @@ const WeatherApp = () => {
           console.log(data.coord.lon);
           // console.log(data[0].coord.lat, data[0].coord.lon);
           getAdditionalData(data.coord.lat, data.coord.lon);
+          getPollutionData(data.coord.lat, data.coord.lon);
           // getAdditionalData(data[0].lat, data[0].lon);
         } else {
           parseWeatherData(data);
@@ -65,6 +73,40 @@ const WeatherApp = () => {
       .catch((error) => {
         console.error("Error fetching weather data:", error);
         setWeatherData(null);
+        alert(
+          "An error occurred while fetching weather data. Please try again later."
+        );
+      });
+  };
+
+  const getPollutionData = (lat, lon) => {
+    fetch(
+      `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=52.2297&lon=21.0122&start=1606223802&end=1606269600&appid=18f2ba39d8b76ccbd01e5a800a9d5d07`
+    )
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((res) => {
+        setData(res.list[0].components);
+        // setData(res.list.map((item) => item.components));
+        // const componentsObject = res.list
+        //   .map((item) => item.components)
+        //   .reduce((obj, component, index) => {
+        //     obj[index] = component;
+        //     return obj;
+        //   }, {});
+        // console.log("ssdad", componentsObject);
+
+        // setData(componentsObject[0]);
+        // setData(res.list);
+        console.log(res.list[0].components);
+        console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+        setData(null);
         alert(
           "An error occurred while fetching weather data. Please try again later."
         );
@@ -153,7 +195,7 @@ const WeatherApp = () => {
 
   return (
     <div>
-      <div class="topp">
+      <div className="topp">
         <h1
           style={{
             color: "white",
@@ -269,6 +311,7 @@ const WeatherApp = () => {
           </div>
         </div>
       )}
+      <div>{data === [] ? <div></div> : <BarChart data2={data} />}</div>
     </div>
   );
 };
