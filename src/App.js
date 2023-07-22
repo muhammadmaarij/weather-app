@@ -18,7 +18,7 @@ const WeatherApp = () => {
   const [selectedOption, setSelectedOption] = useState("city");
   const [metric, setMetric] = useState("metric");
   const [degree, setDegree] = useState("C");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
