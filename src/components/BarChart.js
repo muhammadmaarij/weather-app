@@ -2,7 +2,6 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 
 function BarChart({ data2 }) {
-  console.log("data2", data2);
   let chartData;
   if (data2 == null) {
   } else {
@@ -33,7 +32,7 @@ function BarChart({ data2 }) {
                   },
                   legend: {
                     display: true,
-                    position: "top", // Position of the legend: 'top', 'left', 'bottom', or 'right'
+                    position: "top",
                     labels: {
                       font: {
                         size: 12,
@@ -45,7 +44,7 @@ function BarChart({ data2 }) {
               scales: {
                 x: {
                   grid: {
-                    display: false, // Display the vertical grid lines
+                    display: false,
                   },
                   ticks: {
                     font: {
@@ -56,9 +55,9 @@ function BarChart({ data2 }) {
 
                 y: {
                   grid: {
-                    display: false, // Display the horizontal grid lines
+                    display: false,
                   },
-                  beginAtZero: true, // Start the y-axis at zero
+                  beginAtZero: true,
                   ticks: {
                     font: {
                       size: 20,
