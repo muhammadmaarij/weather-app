@@ -8,8 +8,6 @@ function Card({ day, weatherIcon, high, low, isSelected, onClick }) {
     borderRadius: "10px",
     border: isSelected ? "2px solid #ccc" : "2px solid transparent",
     backgroundColor: isSelected ? "#EEEDED" : "white",
-
-    /* Add any other styles you want */
   };
 
   return (
